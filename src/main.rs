@@ -2,17 +2,52 @@ use core::fmt;
 use std::{  vec, fmt::write};
 use Coisa::{Cor , Number}  ;
 
+enum Direction{
+    left(bool) ,
+    right(bool),
+    up(bool),
+    down(bool),
+}
 struct position{
     x  : i32,
     y  : i32
 }
 struct snake{
     body : Vec<position>,
-    lastDirection : i8
+    lastDirection : Direction
 }
-trait mov {
-    fn direction(&self ,i8)->;
+trait Mov {
+    fn direction(&self ,dir:i8) -> Direction;
 }
+impl Mov for snake {
+    fn direction(&self,dir: i8) -> Direction{
+        // return Direction::up ;
+            match dir  {
+            1 => {
+                self.lastDirection = Direction::left(true);
+                return self.lastDirection ;
+            },
+            2 => {
+                self.lastDirection = Direction::right(true);
+                return self.lastDirection ;
+            },
+            3 => {
+                self.lastDirection = Direction::up(true);
+                return self.lastDirection ;
+            },
+            4 => {
+                self.lastDirection = Direction::down(true);
+                return self.lastDirection ;
+            },
+            _ => {
+                format!("Tecla não prevista digitada foi : {}",dir);
+                return self.lastDirection ;
+            },
+        }
+    }
+}
+
+
 #[derive(Debug)]
 enum Coisa{
     Cor(String),
