@@ -3,10 +3,10 @@ use std::{  vec, fmt::write};
 use Coisa::{Cor , Number}  ;
 
 enum Direction{
-    left(bool) ,
-    right(bool),
-    up(bool),
-    down(bool),
+    left ,
+    right,
+    up,
+    down,
 }
 struct position{
     x  : i32,
@@ -16,27 +16,27 @@ struct snake{
     body : Vec<position>,
     lastDirection : Direction
 }
-trait Mov {
-    fn direction(&self ,dir:i8) -> Direction;
-}
-impl Mov for snake {
-    fn direction(&self,dir: i8) -> Direction{
-        // return Direction::up ;
+// trait Mov {
+//     fn direction(&self ,dir:i8) ;
+// }
+impl snake {
+    pub fn Next_dir(self,dir: i8) -> Direction {
+    
             match dir  {
             1 => {
-                self.lastDirection = Direction::left(true);
+                snake{lastDirection:Direction::left , ..self};
                 return self.lastDirection ;
             },
             2 => {
-                self.lastDirection = Direction::right(true);
+                snake{lastDirection : Direction::right , ..self};
                 return self.lastDirection ;
             },
             3 => {
-                self.lastDirection = Direction::up(true);
+                snake{lastDirection : Direction::up , ..self};
                 return self.lastDirection ;
             },
             4 => {
-                self.lastDirection = Direction::down(true);
+                snake{lastDirection : Direction::down , ..self};
                 return self.lastDirection ;
             },
             _ => {
@@ -46,7 +46,16 @@ impl Mov for snake {
         }
     }
 }
-
+struct field{
+    size_X:i8,
+    size_y:i8,
+    food_Pos:position
+}
+impl field {
+    fn new_Food(self){
+        println!("Eu gero um número aleatório entre 1 e size_x e size_y e guardo como food_Pos");        
+    }
+}
 
 #[derive(Debug)]
 enum Coisa{
