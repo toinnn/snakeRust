@@ -14,6 +14,16 @@ struct position{
     x  : u16,
     y  : u16
 }
+impl PartialEq for position{
+    fn eq(&self , other : &Self) -> bool {
+        if self.x == other.x && self.y == other.y{
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+}
 struct snake{
     body : Vec<position>,
     lastDirection : Direction
@@ -61,7 +71,7 @@ impl field {
             if  !cobra_body.contains(&new_food)   {
                 break;
             }
-            let mut new_food = position{x : rng.gen_range(1..x_field_size) , y : rng.gen_range(1..y_field_size) } ;
+            let mut new_food = position{x : rng.gen_range(1..self.size_X) , y : rng.gen_range(1..self.size_y) } ;
         }
         field{food_Pos : new_food , ..self};
         
