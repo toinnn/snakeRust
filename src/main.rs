@@ -3,7 +3,20 @@ use std::{ vec};
 use Coisa::{Cor , Number}  ;
 use rand::Rng;
 use Direction::{left,right ,up ,down};
+use bevy::prelude::*;
 
+#[derive(Debug)]
+enum Coisa{
+    Cor(String),
+    Number(i32)
+}
+impl fmt::Display for Coisa{
+    fn fmt(&self ,f :&mut fmt::Formatter) -> fmt::Result{ 
+        // format!();
+        write!(f,"{:?}",self)
+        
+    }
+}
 enum Direction{
     left ,
     right,
@@ -28,9 +41,6 @@ struct snake{
     body : Vec<position>,
     lastDirection : Direction
 }
-// trait Mov {
-//     fn direction(&self ,dir:i8) ;
-// }
 impl snake {
     pub fn Next_dir(self,dir: i8) -> Direction {
     
@@ -86,8 +96,9 @@ struct game_session{
 impl game_session {
     pub fn new(x_field_size :u16 ,y_field_size :u16 )-> Self {
         let mut rng = rand::thread_rng();
-        let cobra = snake{body : vec![position{x:rng.gen_range(1..x_field_size-1) , y : rng.gen_range(1..y_field_size)}] ,
-        lastDirection : right };
+        let cobra = snake{body : vec![position{ x:rng.gen_range(1..x_field_size-1) ,
+        y : rng.gen_range(1..y_field_size)}] , lastDirection : right };
+        
         let mut new_food = position{x : rng.gen_range(1..x_field_size) , y : rng.gen_range(1..y_field_size) } ;
         loop {
             if !cobra.body.contains(&new_food) {
@@ -102,30 +113,30 @@ impl game_session {
     }
 }
 
-#[derive(Debug)]
-enum Coisa{
-    Cor(String),
-    Number(i32)
-}
-impl fmt::Display for Coisa{
-    fn fmt(&self ,f :&mut fmt::Formatter) -> fmt::Result{ 
-        // format!();
-        write!(f,"{:?}",self)
-        
+pub struct genericaPlugin;
+impl Plugin for genericaPlugin{
+    fn build(&self, app: &mut App) {
+        app.insert_resource(ClearColor(Color::rgb(0.04,0.04,0.04)))
+            .insert_resource(WindowDescriptor{
+                title:"TELA SUPIMPA !!".to_string(),
+                ..Default::default()
+            });
     }
 
 }
+
 fn main() {
 
-    //println!("Hello, world!!E meus queridos testemunhas ");
     let _num64 = 32f64;
-    //let _cores = vec![12.,13.] ; 
     let mut _cores = vec![Cor("greem".to_string()) , Number(32)];     //let mut _cores = vec![Coisa::Cor(13),Coisa::Number(12)];
-    // let mut _cores = Cor("32".to_string());
-    // let mut _stri = &"blublu"[1..];
-    // println!("bla bla bla {}",_cores ); 
-    // println!("{}",_stri);
     println!("o número é {}\na cor é {}",_cores[1],_cores[0]);
-    //_cores = vec![Coisa::Number(12) , Coisa::Number(12)];
-    // println!("isso aqui {}",_cores[0]);
+    // App::new()
+    //     .add_plugin(CorePlugin::default())
+    //     .add_plugin(InputPlugin::default())
+    //     .add_plugin(WindowPlugin::default())
+    //     .run();
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_plugin(genericaPlugin)       
+        .run();
 }

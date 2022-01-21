@@ -8,3 +8,4 @@ authors = ["Alyson Lima <>"]
 
 [dependencies]
 rand = "0.8.4"
+bevy = "0.6.0"
