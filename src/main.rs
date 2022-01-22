@@ -124,6 +124,29 @@ impl Plugin for genericaPlugin{
     }
 
 }
+fn setup(mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+) {
+    let texture_handle = asset_server.load("grass_tileset_16x16//grass_tileset_16x16.png");
+    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(64.0, 50.0), 1, 3);
+    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(0.0, -220.0, 0.0)),
+        sprite: TextureAtlasSprite::new(2),
+        ..Default::default()} );
+    
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(0.0, -22.0, 0.0)),
+        sprite: TextureAtlasSprite::new(0),
+        ..Default::default()} );
+
+}
 
 fn main() {
 
@@ -137,6 +160,7 @@ fn main() {
     //     .run();
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugin(genericaPlugin)       
+        .add_plugin(genericaPlugin)      
+        .add_startup_system(setup.system()) 
         .run();
 }
