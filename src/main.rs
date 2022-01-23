@@ -129,24 +129,80 @@ fn setup(mut commands: Commands,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
     let texture_handle = asset_server.load("grass_tileset_16x16//grass_tileset_16x16.png");
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(64.0, 50.0), 1, 3);
+    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 9, 9);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
-
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(0.0, -220.0, 0.0)),
-        sprite: TextureAtlasSprite::new(2),
-        ..Default::default()} );
     
+    let mut ctd = 0;
+    for i in (0..9) {
+        for j  in (1..10) {
+            commands.spawn().insert_bundle(SpriteSheetBundle {
+                texture_atlas: texture_atlas_handle.clone(),
+                transform: Transform::from_translation(Vec3::new(17.0*j as f32 , -17.0*i as f32 , 0.0)),
+                sprite: TextureAtlasSprite::new(8),
+                ..Default::default()} ); 
+            commands.spawn().insert_bundle(SpriteSheetBundle {
+                texture_atlas: texture_atlas_handle.clone(),
+                transform: Transform::from_translation(Vec3::new(17.0*j as f32 , -17.0*i as f32 , 0.0)),
+                sprite: TextureAtlasSprite::new(ctd),
+                ..Default::default()} );        
+            ctd = ctd + 1;
+        }
+    }
+    /*
+    ///ROW : 0
     commands.spawn().insert_bundle(SpriteSheetBundle {
         texture_atlas: texture_atlas_handle.clone(),
         transform: Transform::from_translation(Vec3::new(0.0, -22.0, 0.0)),
         sprite: TextureAtlasSprite::new(0),
         ..Default::default()} );
-
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(21.0, -22.0, 0.0)),
+        sprite: TextureAtlasSprite::new(1),
+        ..Default::default()} );
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(42.0, -22.0, 0.0)),
+        sprite: TextureAtlasSprite::new(2),
+        ..Default::default()} );
+    ///ROW : 1
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(0.0, -43.0, 0.0)),
+        sprite: TextureAtlasSprite::new(3),
+        ..Default::default()} );
+    
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(21.0, -43.0, 0.0)),
+        sprite: TextureAtlasSprite::new(4),
+        ..Default::default()} );
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(42.0, -43.0, 0.0)),
+        sprite: TextureAtlasSprite::new(5),
+        ..Default::default()} );
+    ///ROW : 2
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(0.0, -64.0, 0.0)),
+        sprite: TextureAtlasSprite::new(6),
+        ..Default::default()} );
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(21.0, -64.0, 0.0)),
+        sprite: TextureAtlasSprite::new(7),
+        ..Default::default()} );
+    commands.spawn().insert_bundle(SpriteSheetBundle {
+        texture_atlas: texture_atlas_handle.clone(),
+        transform: Transform::from_translation(Vec3::new(42.0, -64.0, 0.0)),
+        sprite: TextureAtlasSprite::new(8),
+        ..Default::default()} );
+    */
 }
+
 
 fn main() {
 
