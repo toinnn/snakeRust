@@ -4,6 +4,8 @@ use Coisa::{Cor , Number}  ;
 use rand::Rng;
 use Direction::{left,right ,up ,down};
 use bevy::prelude::*;
+// use image::*
+use image::imageops::resize; 
 
 #[derive(Debug)]
 enum Coisa{
@@ -119,6 +121,10 @@ impl Plugin for genericaPlugin{
         app.insert_resource(ClearColor(Color::rgb(0.04,0.04,0.04)))
             .insert_resource(WindowDescriptor{
                 title:"TELA SUPIMPA !!".to_string(),
+                width: 1366.0,
+                height: 720.0,
+                vsync: true,
+                position : Some(Vec2::new(-500.0,200.0)),
                 ..Default::default()
             });
     }
@@ -127,16 +133,33 @@ impl Plugin for genericaPlugin{
 fn setup(mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut materials : ResMut<Assets<StandardMaterial>>
 ) {
     let texture_handle = asset_server.load("grass_tileset_16x16//grass_tileset_16x16.png");
+    // let texture_handle = image::open("Yoshi//Yoshi-1.png").unwrap().thumbnail(16, 16) ;//.unwrap();
+    // texture_handle.save("C://Users//limaa//RustLangProjects//snakeRust//assets//Yoshi//Yoshi-1.png") ;
+    // let texture_handle = StandardMaterial{base_color : texture_handle , ..Default::default()};
+    // materials.add(texture_handle);
+    // let texture_handle = asset_server.load("Yoshi//Yoshi-1.png");
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 9, 9);
+    // let texture_atlas = TextureAtlas::from_grid(texture_handle  , Vec2::new(16.0, 16.0), 1, 1);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
+    
+    // let texture_handle = asset_server.load("Fi_Do_Bowser//FdB-1.png").unwrap();
+    // let material_handle = materials.add();
+    // let texture_atlas = TextureAtlas::from_grid(texture_handle  , Vec2::new(72.0, 57.0), 1, 1);
+    // let texture_atlas_handle = texture_atlas.add_texture(rect) .add(texture_atlas);
 
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
     
+    // commands.spawn().insert_bundle(SpriteSheetBundle {
+    //     texture_atlas: texture_atlas_handle.clone(),
+    //     transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 0.0)),
+    //     sprite: TextureAtlasSprite::new(0),
+    //     ..Default::default()} );
     let mut ctd = 0;
-    for i in (0..9) {
-        for j  in (1..10) {
+    for i in 0..9 {
+        for j  in 1..10 {
             commands.spawn().insert_bundle(SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle.clone(),
                 transform: Transform::from_translation(Vec3::new(17.0*j as f32 , -17.0*i as f32 , 0.0)),
@@ -150,57 +173,12 @@ fn setup(mut commands: Commands,
             ctd = ctd + 1;
         }
     }
-    /*
-    ///ROW : 0
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(0.0, -22.0, 0.0)),
-        sprite: TextureAtlasSprite::new(0),
-        ..Default::default()} );
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(21.0, -22.0, 0.0)),
-        sprite: TextureAtlasSprite::new(1),
-        ..Default::default()} );
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(42.0, -22.0, 0.0)),
-        sprite: TextureAtlasSprite::new(2),
-        ..Default::default()} );
-    ///ROW : 1
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(0.0, -43.0, 0.0)),
-        sprite: TextureAtlasSprite::new(3),
-        ..Default::default()} );
+    // commands.spawn().insert_bundle(SpriteComponents {
+    //     material : materials.add(texture_handle.into()),
+    //     transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 0.0)),
+    //     ..Default::default()} );
     
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(21.0, -43.0, 0.0)),
-        sprite: TextureAtlasSprite::new(4),
-        ..Default::default()} );
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(42.0, -43.0, 0.0)),
-        sprite: TextureAtlasSprite::new(5),
-        ..Default::default()} );
-    ///ROW : 2
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(0.0, -64.0, 0.0)),
-        sprite: TextureAtlasSprite::new(6),
-        ..Default::default()} );
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(21.0, -64.0, 0.0)),
-        sprite: TextureAtlasSprite::new(7),
-        ..Default::default()} );
-    commands.spawn().insert_bundle(SpriteSheetBundle {
-        texture_atlas: texture_atlas_handle.clone(),
-        transform: Transform::from_translation(Vec3::new(42.0, -64.0, 0.0)),
-        sprite: TextureAtlasSprite::new(8),
-        ..Default::default()} );
-    */
+    
 }
 
 
