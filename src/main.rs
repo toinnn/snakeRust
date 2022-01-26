@@ -179,9 +179,10 @@ fn setup(mut commands: Commands,
             ctd = ctd + 1;
         }
     }
-    // commands.spawn().insert_bundle(SpriteSheetBundle {//.spawn_bundle(SpriteComponents{
-    //     material: materials.add(asset_server.load("Fi_Do_Bowser//FdB-1.png").into()) ,
-    //     ..Default::default() });
+    commands.spawn_bundle(SpriteBundle {
+        texture: asset_server.load("Fi_Do_Bowser//FdB-1.png").into() ,
+        transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 1.0)),
+        ..Default::default() });
 
 
     // commands.spawn().insert_bundle(SpriteComponents {
