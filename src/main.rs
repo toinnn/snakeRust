@@ -139,11 +139,10 @@ fn setup(mut commands: Commands,
 ) {
     
     let texture_handle = asset_server.load("grass_tileset_16x16//grass_tileset_16x16.png");
-    // let texture_handle = image::open("Yoshi//Yoshi-1.png").unwrap().thumbnail(16, 16) ;//.unwrap();
+    // let textura = image::open("Yoshi//Yoshi-1.png").unwrap().thumbnail(16, 16) ;//.unwrap();
     // texture_handle.save("C://Users//limaa//RustLangProjects//snakeRust//assets//Yoshi//Yoshi-1.png") ;
-    // let texture_handle = StandardMaterial{base_color : texture_handle , ..Default::default()};
-    // materials.add(texture_handle);
-    // let texture_handle = asset_server.load("Yoshi//Yoshi-1.png");
+    // let textura = StandardMaterial{base_color : textura.color().into() ,..Default::default()};
+    
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 9, 9);
     // let texture_atlas = TextureAtlas::from_grid(texture_handle  , Vec2::new(16.0, 16.0), 1, 1);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
@@ -181,6 +180,7 @@ fn setup(mut commands: Commands,
     }
     commands.spawn_bundle(SpriteBundle {
         texture: asset_server.load("Fi_Do_Bowser//FdB-1.png").into() ,
+        // texture: textura.base_color_texture.unwrap() ,
         transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 1.0)),
         ..Default::default() });
 
