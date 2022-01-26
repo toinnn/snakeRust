@@ -1,9 +1,11 @@
+#![allow(unused)]
 use core::fmt;
 use std::{ vec};
 use Coisa::{Cor , Number}  ;
 use rand::Rng;
 use Direction::{left,right ,up ,down};
 use bevy::prelude::*;
+// use bevy::sprite::entity::*;
 // use image::*
 use image::imageops::resize; 
 
@@ -115,26 +117,27 @@ impl game_session {
     }
 }
 
-pub struct genericaPlugin;
-impl Plugin for genericaPlugin{
-    fn build(&self, app: &mut App) {
-        app.insert_resource(ClearColor(Color::rgb(0.04,0.04,0.04)))
-            .insert_resource(WindowDescriptor{
-                title:"TELA SUPIMPA !!".to_string(),
-                width: 1366.0,
-                height: 720.0,
-                vsync: true,
-                position : Some(Vec2::new(-500.0,200.0)),
-                ..Default::default()
-            });
-    }
+// pub struct genericaPlugin;
+// impl Plugin for genericaPlugin{
+//     fn build(&self, app: &mut App) {
+//         app.insert_resource(ClearColor(Color::rgb(0.04,0.04,0.04)))
+//             .insert_resource(WindowDescriptor{
+//                 title:"TELA SUPIMPA !!".to_string(),
+//                 width: 400.0,
+//                 height: 200.0,
+//                 vsync: true, 
+//                 // position : Some(Vec2::new(-500.0,200.0)),
+//                 ..Default::default()
+//             });
+//     }
 
-}
+// }
 fn setup(mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
-    mut materials : ResMut<Assets<StandardMaterial>>
+    mut windows : ResMut<Windows>,mut materials : ResMut<Assets<StandardMaterial>>
 ) {
+    
     let texture_handle = asset_server.load("grass_tileset_16x16//grass_tileset_16x16.png");
     // let texture_handle = image::open("Yoshi//Yoshi-1.png").unwrap().thumbnail(16, 16) ;//.unwrap();
     // texture_handle.save("C://Users//limaa//RustLangProjects//snakeRust//assets//Yoshi//Yoshi-1.png") ;
@@ -150,14 +153,17 @@ fn setup(mut commands: Commands,
     // let texture_atlas = TextureAtlas::from_grid(texture_handle  , Vec2::new(72.0, 57.0), 1, 1);
     // let texture_atlas_handle = texture_atlas.add_texture(rect) .add(texture_atlas);
 
+    let mut window = windows.get_primary_mut().unwrap();
+    window.set_position(IVec2::new(0,0));
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    
     
     // commands.spawn().insert_bundle(SpriteSheetBundle {
     //     texture_atlas: texture_atlas_handle.clone(),
     //     transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 0.0)),
     //     sprite: TextureAtlasSprite::new(0),
     //     ..Default::default()} );
-    let mut ctd = 0;
+    let mut ctd = 0; 
     for i in 0..9 {
         for j  in 1..10 {
             commands.spawn().insert_bundle(SpriteSheetBundle {
@@ -173,6 +179,11 @@ fn setup(mut commands: Commands,
             ctd = ctd + 1;
         }
     }
+    // commands.spawn().insert_bundle(SpriteSheetBundle {//.spawn_bundle(SpriteComponents{
+    //     material: materials.add(asset_server.load("Fi_Do_Bowser//FdB-1.png").into()) ,
+    //     ..Default::default() });
+
+
     // commands.spawn().insert_bundle(SpriteComponents {
     //     material : materials.add(texture_handle.into()),
     //     transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 0.0)),
@@ -194,7 +205,14 @@ fn main() {
     //     .run();
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_plugin(genericaPlugin)      
+        // .add_plugin(genericaPlugin)      
+        .insert_resource(ClearColor(Color::rgb(0.04,0.04,0.04)))
+        .insert_resource(WindowDescriptor{
+            title:"TELA SUPIMPA !!".to_string(),
+            width: 400.0,
+            height: 200.0, 
+            ..Default::default()
+        })
         .add_startup_system(setup.system()) 
         .run();
 }
