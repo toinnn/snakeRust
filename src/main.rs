@@ -163,9 +163,14 @@ fn animate_sprite_system(
 fn spawnAnimado(path : &str ,
     spriteScale : f32,
     worldScale : f32 ,
+    translation_X : f32,
+    translation_Y : f32,
+    translation_Z : f32,
+
     sprite_Tile_Size : Vec2,   
     sprite_Sheet_Columns : u8,
     sprite_Sheet_rows : u8 ,
+
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
@@ -180,8 +185,8 @@ fn spawnAnimado(path : &str ,
         commands
             .spawn_bundle(SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle,
-                transform: Transform::from_scale(Vec3::splat(Fi_scale))
-                .with_translation(Vec3::new(1.0*worldScale*27.5 , 15.0*-17.0 , 1.0)),
+                transform: Transform::from_scale(Vec3::splat(Fi_scale)) 
+                .with_translation(Vec3::new(worldScale*translation_X , translation_Y , translation_Z )),
                 ..Default::default()
             })
             .insert(Timer::from_seconds(0.1, true));
@@ -244,23 +249,15 @@ fn setup(mut commands: Commands,
             ..Default::default()
         })
         .insert(Timer::from_seconds(0.1, true));
-
-        // let Fi_scale = 1.0/1.2;
-        // let texture_handle = asset_server.load("Fi_Do_Bowser//Yoshi_SpriteSheet.png");
-        // let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(52.0, 68.0), 12, 1);
-        // let texture_atlas_handle = texture_atlases.add(texture_atlas);
-        // commands.spawn_bundle(OrthographicCameraBundle::new_2d());
-        // commands
-        //     .spawn_bundle(SpriteSheetBundle {
-        //         texture_atlas: texture_atlas_handle,
-        //         transform: Transform::from_scale(Vec3::splat(Fi_scale))
-        //         .with_translation(Vec3::new(1.0*scale*27.5 , 15.0*-17.0 , 1.0)),
-        //         ..Default::default()
-        //     })
-        //     .insert(Timer::from_seconds(0.1, true));
-        spawnAnimado("Fi_Do_Bowser//Yoshi_SpriteSheet.png" , 1.0/1.2 ,2.0 ,
-            Vec2::new(52.0, 68.0), 12, 1,
-            commands , asset_server , texture_atlases);
+    
+    // spawnAnimado("Fi_Do_Bowser//FiDoBowser_SpriteSheet.bmp",1.0/1.2 ,2.0,
+    //     27.5 , -17.0 , 1.0,
+    //     Vec2::new(72.0, 57.0), 24, 1,
+    //     commands , asset_server , texture_atlases);
+    spawnAnimado("Fi_Do_Bowser//Yoshi_SpriteSheet.png" , 1.0/1.2 ,2.0 ,
+        27.5 , 15.0*-17.0 , 1.0 ,
+        Vec2::new(52.0, 68.0), 12, 1,
+        commands , asset_server , texture_atlases);
     // commands.spawn().insert_bundle(SpriteComponents {
     //     material : materials.add(texture_handle.into()),
     //     transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 0.0)),
