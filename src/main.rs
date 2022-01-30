@@ -160,17 +160,21 @@ fn animate_sprite_system(
 //     }
 
 // }
-fn spawnAnimado(path :String ,
+fn spawnAnimado(path : &str ,
     spriteScale : f32,
     worldScale : f32 ,
+    sprite_Tile_Size : Vec2,   
+    sprite_Sheet_Columns : u8,
+    sprite_Sheet_rows : u8 ,
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
     )
 {
     let Fi_scale = spriteScale;
-        let texture_handle = asset_server.load("Fi_Do_Bowser//Yoshi_SpriteSheet.png");
-        let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(52.0, 68.0), 12, 1);
+        let texture_handle = asset_server.load(path);
+        let texture_atlas = TextureAtlas::from_grid(texture_handle ,
+            sprite_Tile_Size , sprite_Sheet_Columns.into() , sprite_Sheet_rows.into());
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
         commands.spawn_bundle(OrthographicCameraBundle::new_2d());
         commands
@@ -254,7 +258,8 @@ fn setup(mut commands: Commands,
         //         ..Default::default()
         //     })
         //     .insert(Timer::from_seconds(0.1, true));
-        spawnAnimado("Fi_Do_Bowser//Yoshi_SpriteSheet.png".to_string() , 1.0/1.2 ,2.0 ,
+        spawnAnimado("Fi_Do_Bowser//Yoshi_SpriteSheet.png" , 1.0/1.2 ,2.0 ,
+            Vec2::new(52.0, 68.0), 12, 1,
             commands , asset_server , texture_atlases);
     // commands.spawn().insert_bundle(SpriteComponents {
     //     material : materials.add(texture_handle.into()),
