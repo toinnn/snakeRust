@@ -130,6 +130,7 @@ fn animate_sprite_system(
         }
     }
 }
+
 // pub struct genericaPlugin;
 // impl Plugin for genericaPlugin{
 //     fn build(&self, app: &mut App,
@@ -166,12 +167,8 @@ fn setup(mut commands: Commands,
 ) {
     
     let texture_handle = asset_server.load("grass_tileset_16x16//grass_tileset_16x16.png");
-    // let textura = image::open("Yoshi//Yoshi-1.png").unwrap().thumbnail(16, 16) ;//.unwrap();
-    // texture_handle.save("C://Users//limaa//RustLangProjects//snakeRust//assets//Yoshi//Yoshi-1.png") ;
-    // let textura = StandardMaterial{base_color : textura.color().into() ,..Default::default()};
     
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(16.0, 16.0), 9, 9);
-    // let texture_atlas = TextureAtlas::from_grid(texture_handle  , Vec2::new(16.0, 16.0), 1, 1);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
     
     // let texture_handle = asset_server.load("Fi_Do_Bowser//FdB-1.png").unwrap();
@@ -183,48 +180,59 @@ fn setup(mut commands: Commands,
     window.set_position(IVec2::new(0,0));
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
     
-    
-    // commands.spawn().insert_bundle(SpriteSheetBundle {
-    //     texture_atlas: texture_atlas_handle.clone(),
-    //     transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 0.0)),
-    //     sprite: TextureAtlasSprite::new(0),
-    //     ..Default::default()} );
+    let scale = 2.0;
     let mut ctd = 0; 
     for i in 0..9 {
         for j  in 1..10 {
             commands.spawn().insert_bundle(SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle.clone(),
-                transform: Transform::from_translation(Vec3::new(17.0*j as f32 , -17.0*i as f32 , 0.0)),
+                transform: Transform::from_translation(Vec3::new(scale*17.0*j as f32 , scale*-17.0*i as f32 , 0.0))
+                    .with_scale(Vec3::splat(scale)),
                 sprite: TextureAtlasSprite::new(8),
                 ..Default::default()} ); 
             commands.spawn().insert_bundle(SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle.clone(),
-                transform: Transform::from_translation(Vec3::new(17.0*j as f32 , -17.0*i as f32 , 0.0)),
+                transform: Transform::from_translation(Vec3::new(scale*17.0*j as f32 , scale*-17.0*i as f32 , 0.0))
+                    .with_scale(Vec3::splat(scale)),
                 sprite: TextureAtlasSprite::new(ctd),
                 ..Default::default()} );        
             ctd = ctd + 1;
         }
 
-        let texture_handle = asset_server.load("Fi_Do_Bowser//FiDoBowser_SpriteSheet.bmp");
-        let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(72.0, 57.0), 24, 1);
+            }
+    // commands.spawn_bundle(SpriteBundle {
+    //     // texture: asset_server.load("d9cuskc-2ec59299-0a41-4c29-813c-cdd3dfb44b6e.gif").into() ,
+    //     texture: asset_server.load("Fi_Do_Bowser//FdB-1.png").into() ,
+    //     // texture: textura.base_color_texture.unwrap() ,
+    //     transform: Transform::from_translation(Vec3::new(scale*30.0 , -17.0 , 1.0)),
+    //     ..Default::default() });
+    let Fi_scale = 1.0/1.2;
+    let texture_handle = asset_server.load("Fi_Do_Bowser//FiDoBowser_SpriteSheet.bmp");
+    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(72.0, 57.0), 24, 1);
+    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands
+        .spawn_bundle(SpriteSheetBundle {
+            texture_atlas: texture_atlas_handle,
+            transform: Transform::from_scale(Vec3::splat(Fi_scale)).with_translation(Vec3::new(scale*27.5 , -17.0 , 1.0)),
+            ..Default::default()
+        })
+        .insert(Timer::from_seconds(0.1, true));
+
+        let Fi_scale = 1.0/1.2;
+        let texture_handle = asset_server.load("Fi_Do_Bowser//Yoshi_SpriteSheet.bmp");
+        let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(52.0, 68.0), 12, 1);
         let texture_atlas_handle = texture_atlases.add(texture_atlas);
         commands.spawn_bundle(OrthographicCameraBundle::new_2d());
         commands
             .spawn_bundle(SpriteSheetBundle {
                 texture_atlas: texture_atlas_handle,
-                transform: Transform::from_scale(Vec3::splat(6.0)),
+                transform: Transform::from_scale(Vec3::splat(Fi_scale))
+                .with_translation(Vec3::new(1.0*scale*27.5 , 15.0*-17.0 , 1.0)),
                 ..Default::default()
             })
             .insert(Timer::from_seconds(0.1, true));
-    }
-    commands.spawn_bundle(SpriteBundle {
-        // texture: asset_server.load("d9cuskc-2ec59299-0a41-4c29-813c-cdd3dfb44b6e.gif").into() ,
-        texture: asset_server.load("Fi_Do_Bowser//FdB-1.png").into() ,
-        // texture: textura.base_color_texture.unwrap() ,
-        transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 1.0)),
-        ..Default::default() });
-
-
+    
     // commands.spawn().insert_bundle(SpriteComponents {
     //     material : materials.add(texture_handle.into()),
     //     transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 0.0)),
