@@ -117,18 +117,45 @@ impl game_session {
     }
 }
 
+fn animate_sprite_system(
+    time: Res<Time>,
+    texture_atlases: Res<Assets<TextureAtlas>>,
+    mut query: Query<(&mut Timer, &mut TextureAtlasSprite, &Handle<TextureAtlas>)>,
+) {
+    for (mut timer, mut sprite, texture_atlas_handle) in query.iter_mut() {
+        timer.tick(time.delta());
+        if timer.finished() {
+            let texture_atlas = texture_atlases.get(texture_atlas_handle).unwrap();
+            sprite.index = (sprite.index + 1) % texture_atlas.textures.len();
+        }
+    }
+}
 // pub struct genericaPlugin;
 // impl Plugin for genericaPlugin{
-//     fn build(&self, app: &mut App) {
-//         app.insert_resource(ClearColor(Color::rgb(0.04,0.04,0.04)))
-//             .insert_resource(WindowDescriptor{
-//                 title:"TELA SUPIMPA !!".to_string(),
-//                 width: 400.0,
-//                 height: 200.0,
-//                 vsync: true, 
-//                 // position : Some(Vec2::new(-500.0,200.0)),
+//     fn build(&self, app: &mut App,
+//         mut commands: Commands,
+//         asset_server: Res<AssetServer>,
+//         mut texture_atlases: ResMut<Assets<TextureAtlas>>) {
+//         // app.insert_resource(ClearColor(Color::rgb(0.04,0.04,0.04)))
+//         //     .insert_resource(WindowDescriptor{
+//         //         title:"TELA SUPIMPA !!".to_string(),
+//         //         width: 400.0,
+//         //         height: 200.0,
+//         //         vsync: true, 
+//         //         // position : Some(Vec2::new(-500.0,200.0)),
+//         //         ..Default::default()
+//         //     });
+//         let texture_handle = asset_server.load("Fi_Do_Bowser//FiDoBowser_SpriteSheet.bmp");
+//         let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(72.0, 57.0), 24, 1);
+//         let texture_atlas_handle = texture_atlases.add(texture_atlas);
+//         commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+//         commands
+//             .spawn_bundle(SpriteSheetBundle {
+//                 texture_atlas: texture_atlas_handle,
+//                 transform: Transform::from_scale(Vec3::splat(6.0)),
 //                 ..Default::default()
-//             });
+//             })
+//             .insert(Timer::from_seconds(0.1, true));
 //     }
 
 // }
@@ -177,8 +204,21 @@ fn setup(mut commands: Commands,
                 ..Default::default()} );        
             ctd = ctd + 1;
         }
+
+        let texture_handle = asset_server.load("Fi_Do_Bowser//FiDoBowser_SpriteSheet.bmp");
+        let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(72.0, 57.0), 24, 1);
+        let texture_atlas_handle = texture_atlases.add(texture_atlas);
+        commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+        commands
+            .spawn_bundle(SpriteSheetBundle {
+                texture_atlas: texture_atlas_handle,
+                transform: Transform::from_scale(Vec3::splat(6.0)),
+                ..Default::default()
+            })
+            .insert(Timer::from_seconds(0.1, true));
     }
     commands.spawn_bundle(SpriteBundle {
+        // texture: asset_server.load("d9cuskc-2ec59299-0a41-4c29-813c-cdd3dfb44b6e.gif").into() ,
         texture: asset_server.load("Fi_Do_Bowser//FdB-1.png").into() ,
         // texture: textura.base_color_texture.unwrap() ,
         transform: Transform::from_translation(Vec3::new(17.0 , -17.0 , 1.0)),
@@ -215,5 +255,6 @@ fn main() {
             ..Default::default()
         })
         .add_startup_system(setup.system()) 
+        .add_system(animate_sprite_system)
         .run();
 }
