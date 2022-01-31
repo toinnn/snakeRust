@@ -6,8 +6,9 @@ use rand::Rng;
 use Direction::{left,right ,up ,down};
 use bevy::prelude::*;
 // use bevy::sprite::entity::*;
-// use image::*
-use image::imageops::resize; 
+use noise::Perlin;
+use noise::NoiseFn;
+use perlin_noise::PerlinNoise;
 
 #[derive(Debug)]
 enum Coisa{
@@ -290,6 +291,14 @@ fn main() {
     //     .add_plugin(InputPlugin::default())
     //     .add_plugin(WindowPlugin::default())
     //     .run();
+    let perli = Perlin::new();
+    let val = perli.get([ 37.7, 2.8]) ;
+
+    let perlin = PerlinNoise::new();
+    println!("{}",val );
+    println!("{}",perlin.get2d([12.0,32.0]));
+    
+    
     App::new()
         .add_plugins(DefaultPlugins)
         // .add_plugin(genericaPlugin)      
