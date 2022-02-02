@@ -9,6 +9,14 @@ use bevy::prelude::*;
 use noise::Perlin;
 use noise::NoiseFn;
 use perlin_noise::PerlinNoise;
+// use utilities::map;
+
+
+
+
+pub fn map(n: f32, start1: f32, stop1: f32, start2: f32, stop2: f32) -> f32 {
+    (n - start1) / (stop1 - start1) * (stop2 - start2) + start2
+}
 
 #[derive(Debug)]
 enum Coisa{
@@ -210,6 +218,7 @@ fn setup(mut commands: Commands,
 
     let mut window = windows.get_primary_mut().unwrap();
     window.set_position(IVec2::new(0,0));
+    window.set_title( "TELA SUPIMPA !!".to_string() );
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
     
     let scale = 2.0;
@@ -256,6 +265,7 @@ fn setup(mut commands: Commands,
     let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(62.0, 92.0), 8, 1);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
     // commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    
     commands
         .spawn_bundle(SpriteSheetBundle {
         texture_atlas: texture_atlas_handle,
@@ -267,10 +277,31 @@ fn setup(mut commands: Commands,
     //     27.5 , -17.0 , 1.0,
     //     Vec2::new(72.0, 57.0), 24, 1,
     //     commands , asset_server , texture_atlases);
-    spawnAnimado("Fi_Do_Bowser//Yoshi_SpriteSheet.png" , 1.0/1.2 ,2.0 ,
-        27.5 , 15.0*-17.0 , 1.0 ,
-        Vec2::new(52.0, 68.0), 12, 1,
-        commands , asset_server , texture_atlases);
+
+    // spawnAnimado("Fi_Do_Bowser//Yoshi_SpriteSheet.png" , 1.0/1.2 ,2.0 ,
+    //     27.5 , 15.0*-17.0 , 1.0 ,
+    //     Vec2::new(52.0, 68.0), 12, 1,
+    //     commands , asset_server , texture_atlases);
+    let perli = Perlin::new();
+    let val = map(perli.get([ 37.7, 2.8]) as f32  , -1.0 ,1.0 , 0.0 , 1.0) ;
+
+    let perlin = PerlinNoise::new();
+    println!("{}",val );
+    println!("{}",perlin.get2d([12.0,32.0]));
+
+    for i in 0..300 {
+        for j  in 0..200 {
+        let valor = map(perlin.get2d([ 0.01*i as f64 , 0.01*j as f64 ]) as f32  , -1.0 ,1.0 , 0.0 , 1.0) ;
+        // println!("{}",valor ); 
+        // let valor = perlin.get2d([i as f64 , j as f64 ]); 
+        // valor = valor ;
+    commands.spawn_bundle(SpriteBundle{ 
+        sprite : Sprite{color : Color::rgba(0.04 , 0.04 , 0.04 , 20.0*valor as f32 ) ,custom_size : Vec2::new(2.0,2.0 ).into() ,
+             .. Default::default()},transform: Transform::from_translation(Vec3::new(-650.0 + 2.0*i as f32 ,
+                320.0 - 2.0*j as f32 , 2.0)) ,
+         ..Default::default()
+    });
+    }} 
     
     // commands.spawn().insert_bundle(SpriteComponents {
     //     material : materials.add(texture_handle.into()),
@@ -291,24 +322,13 @@ fn main() {
     //     .add_plugin(InputPlugin::default())
     //     .add_plugin(WindowPlugin::default())
     //     .run();
-    let perli = Perlin::new();
-    let val = perli.get([ 37.7, 2.8]) ;
-
-    let perlin = PerlinNoise::new();
-    println!("{}",val );
-    println!("{}",perlin.get2d([12.0,32.0]));
+    
     
     
     App::new()
         .add_plugins(DefaultPlugins)
         // .add_plugin(genericaPlugin)      
         .insert_resource(ClearColor(Color::rgb(0.04,0.04,0.04)))
-        .insert_resource(WindowDescriptor{
-            title:"TELA SUPIMPA !!".to_string(),
-            width: 400.0,
-            height: 200.0, 
-            ..Default::default()
-        })
         .add_startup_system(setup.system()) 
         .add_system(animate_sprite_system)
         .run();
