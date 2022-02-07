@@ -288,15 +288,15 @@ fn setup(mut commands: Commands,
     let perlin = PerlinNoise::new();
     println!("{}",val );
     println!("{}",perlin.get2d([12.0,32.0]));
-
+    //async
     for i in 0..300 {
         for j  in 0..200 {
-        let valor = map(perlin.get2d([ 0.01*i as f64 , 0.01*j as f64 ]) as f32  , -1.0 ,1.0 , 0.0 , 1.0) ;
+        let valor = 20.0*map(perlin.get2d([ 0.01*i as f64 , 0.01*j as f64 ]) as f32  , -1.0 ,1.0 , 0.0 , 1.0) ;
         // println!("{}",valor ); 
         // let valor = perlin.get2d([i as f64 , j as f64 ]); 
         // valor = valor ;
     commands.spawn_bundle(SpriteBundle{ 
-        sprite : Sprite{color : Color::rgba(0.04 , 0.04 , 0.04 , 20.0*valor as f32 ) ,custom_size : Vec2::new(2.0,2.0 ).into() ,
+        sprite : Sprite{color : Color::rgba(0.04 , 0.04 , 0.04 , valor as f32 ) ,custom_size : Vec2::new(2.0,2.0 ).into() ,
              .. Default::default()},transform: Transform::from_translation(Vec3::new(-650.0 + 2.0*i as f32 ,
                 320.0 - 2.0*j as f32 , 2.0)) ,
          ..Default::default()
