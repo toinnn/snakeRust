@@ -5,7 +5,7 @@ use Coisa::{Cor , Number}  ;
 use rand::Rng;
 use Direction::{left,right ,up ,down};
 use bevy::prelude::*;
-// use bevy::sprite::entity::*;
+use image::{RgbaImage , RgbImage};
 use noise::Perlin;
 use noise::NoiseFn;
 use perlin_noise::PerlinNoise;
@@ -310,7 +310,16 @@ fn setup(mut commands: Commands,
     
     
 }
-
+fn drawImageNoise(x_size : u32 , y_size : u32 , img : &mut RgbImage){
+    let perlin = PerlinNoise::new();
+    for i in 0..x_size/2 {
+        for j  in 0..y_size/2 {
+            let valor = 20.0*map(perlin.get2d([ 0.01*i as f64 , 0.01*j as f64 ]) as f32  ,
+                -1.0 ,1.0 , 0.0 , 1.0) ;
+            img.get_pixel_mut(i*2 , j*2 ).data = [0.04 , 0.04 , 0.04 ];
+        }
+    }
+}
 
 fn main() {
 
