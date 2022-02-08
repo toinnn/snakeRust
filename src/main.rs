@@ -2,6 +2,7 @@
 use core::fmt;
 use std::{ vec};
 use Coisa::{Cor , Number}  ;
+use image::Rgba32FImage;
 use rand::Rng;
 use Direction::{left,right ,up ,down};
 use bevy::prelude::*;
@@ -310,15 +311,19 @@ fn setup(mut commands: Commands,
     
     
 }
-fn drawImageNoise(x_size : u32 , y_size : u32 , img : &mut RgbImage){
+fn drawImageNoise(x_size : u32 , y_size : u32 ){
     let perlin = PerlinNoise::new();
-    for i in 0..x_size/2 {
-        for j  in 0..y_size/2 {
+    let mut img = Rgba32FImage::new(x_size, y_size );
+    
+    for i in 0..x_size {
+        for j  in 0..y_size {
             let valor = 20.0*map(perlin.get2d([ 0.01*i as f64 , 0.01*j as f64 ]) as f32  ,
                 -1.0 ,1.0 , 0.0 , 1.0) ;
-            img.get_pixel_mut(i*2 , j*2 ).data = [0.04 , 0.04 , 0.04 ];
+            *img.get_pixel_mut(i , j ) = image::Rgba::<f32>([0.04 as f32 , 0.04 as f32 , 0.04 as f32 , valor as f32 ]); //[0.04 , 0.04 , 0.04 , valor as f32];
+ 
         }
     }
+    img.save("C://Users//limaa//RustLangProjects//PerlinNoiseGerado.png");
 }
 
 fn main() {
@@ -331,7 +336,8 @@ fn main() {
     //     .add_plugin(InputPlugin::default())
     //     .add_plugin(WindowPlugin::default())
     //     .run();
-    
+    drawImageNoise(600 , 400) ;
+
     
     
     App::new()
